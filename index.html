@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-dot"></div>
+                <h2>FinTracker</h2>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-item active" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+                <button class="nav-item" onclick="switchTab('add-expense')"><i class="fa-solid fa-plus-circle"></i> Add Expense</button>
+                <button class="nav-item" onclick="switchTab('transactions')"><i class="fa-solid fa-list-check"></i> Transactions</button>
+                <button class="nav-item" onclick="switchTab('analytics')"><i class="fa-solid fa-chart-line"></i> Analytics</button>
+                <button class="nav-item" onclick="switchTab('budget')"><i class="fa-solid fa-wallet"></i> Budget Planner</button>
+                <button class="nav-item" onclick="switchTab('savings')"><i class="fa-solid fa-piggy-bank"></i> Savings Goals</button>
+                <button class="nav-item" onclick="switchTab('profile')"><i class="fa-solid fa-user-gear"></i> Profile</button>
+            </nav>
+            <div class="sidebar-footer">
+                <p class="user-tag" id="sidebarUserTag">Pro Plus Active</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            
+            <section id="dashboard" class="tab-content active">
+                <div class="header">
+                    <h1 id="dashboardGreeting">Welcome back, Shivani</h1>
+                    <p class="subtitle">Here's your financial overview for this month.</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card glass balance">
+                        <h3>Total Balance</h3>
+                        <p class="amount" id="dashTotalBalance">₹0.00</p>
+                        <span class="trend up"><i class="fa-solid fa-arrow-trend-up"></i> Live Calculations</span>
+                    </div>
+                    <div class="stat-card glass income">
+                        <h3>Monthly Income</h3>
+                        <p class="amount">₹75,000.00</p>
+                    </div>
+                    <div class="stat-card glass expenses">
+                        <h3>Total Expenses</h3>
+                        <p class="amount" id="dashTotalExpenses">₹0.00</p>
+                    </div>
+                </div>
+                <div class="dashboard-bottom">
+                    <div class="mini-chart glass" style="position: relative; height: 360px; width: 100%; padding: 1.25rem; overflow: hidden; box-sizing: border-box;">
+                        <h3 style="margin-top: 0; margin-bottom: 1rem;">Weekly Expenditure Stream Analytics</h3>
+                        <div style="position: relative; height: calc(100% - 40px); width: 100%;">
+                            <canvas id="dashChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="recent-activity glass">
+                        <h3>Recent Actions</h3>
+                        <ul class="activity-list" id="dashboardRecentActivity">
+                            </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="add-expense" class="tab-content">
+                <div class="header"><h1>Log New Expense</h1></div>
+                <div class="form-container glass">
+                    <form id="expenseForm">
+                        <div class="form-group">
+                            <label>Amount (INR)</label>
+                            <input type="number" id="expAmount" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="expCategory">
+                                <option value="Food">Food & Dining</option>
+                                <option value="Utilities">Utilities & Bills</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Travel">Travel</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="expDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description/Notes</label>
+                            <input type="text" id="expDesc" placeholder="e.g., Dinner at cafe" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Add Transaction</button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="transactions" class="tab-content">
+                <div class="header"><h1>Transaction History</h1></div>
+                <div class="table-container glass">
+                    <table class="pro-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="analytics" class="tab-content">
+                <div class="header">
+                    <h1>Visual Analytics</h1>
+                    <p class="subtitle">Real-time graphic data streams visualization panel.</p>
+                </div>
+                <div class="analytics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    
+                    <div class="chart-box glass" style="position: relative; height: 360px; width: 100%; padding: 1.25rem; overflow: hidden; box-sizing: border-box;">
+                        <h3 style="margin-top: 0; margin-bottom: 1rem;">Expense Structure</h3>
+                        <div style="position: relative; height: calc(100% - 40px); width: 100%;">
+                            <canvas id="analyticsPieChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-box glass" style="position: relative; height: 360px; width: 100%; padding: 1.25rem; overflow: hidden; box-sizing: border-box;">
+                        <h3 style="margin-top: 0; margin-bottom: 1rem;">Income vs Expense Trend</h3>
+                        <div style="position: relative; height: calc(100% - 40px); width: 100%;">
+                            <canvas id="analyticsBarChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="budget" class="tab-content">
+                <div class="header">
+                    <h1>Category Wise Limits Engine</h1>
+                    <p class="subtitle">Live analysis of allocated targets versus active real-time outgoing streams.</p>
+                </div>
+                <div class="budget-grid" id="automatedBudgetCardsContainer">
+                    </div>
+            </section>
+
+            <section id="savings" class="tab-content">
+                <div class="header">
+                    <h1>Real-Time Savings Engine</h1>
+                    <p class="subtitle">Calculated automatically after processing all active month expenses.</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card glass balance" style="border-color: var(--success);">
+                        <h3>Net Savings This Month</h3>
+                        <p class="amount" id="automatedSavingsBox" style="color: var(--success);">₹0.00</p>
+                        <span class="trend up" id="savingsPercentageIndicator" style="background: rgba(0, 250, 154, 0.08);"><i class="fa-solid fa-piggy-bank"></i> 0% of Income Saved</span>
+                    </div>
+                </div>
+                <div class="recent-activity glass" style="margin-top: 2rem;">
+                    <h3>Financial Efficiency Status</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;" id="savingsStatusMessage">
+                        Loading core parameters logic structures matrix entries analytics...
+                    </p>
+                </div>
+            </section>
+
+            <section id="profile" class="tab-content">
+                <div class="header">
+                    <h1>Account Matrix</h1>
+                    <p class="subtitle">Manage real-time execution tokens & user definitions.</p>
+                </div>
+                
+                <div class="profile-card-elite">
+                    <div class="profile-hero-section">
+                        <div class="avatar-wrapper-pro">
+                            <div class="avatar-pro-glow">
+                                <i class="fa-solid fa-user-astronaut"></i>
+                            </div>
+                            <div class="pro-badge-ring" id="tierBadgeIndicator">Pro Plus</div>
+                        </div>
+                        <div class="hero-text-block">
+                            <h2 id="displayUserName">Shivani</h2>
+                            <p class="tier-text-status" id="displayUserTier">Pro Plus Level Token</p>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;" id="displayUserEmail">shivani@tracker.io</p>
+                        </div>
+                    </div>
+
+                    <hr class="divider">
+
+                    <div class="profile-control-grid">
+                        <div class="control-panel-box">
+                            <h3>Identity Definitions</h3>
+                            <div class="form-group">
+                                <input type="text" id="inputProfileName" class="pro-input-field" value="Shivani" placeholder="Update Name">
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="inputProfileEmail" class="pro-input-field" value="shivani@tracker.io" placeholder="Update Email">
+                            </div>
+                            <button type="button" class="btn-primary" onclick="updateLiveIdentity()">Save Core Profile</button>
+                        </div>
+
+                        <div class="control-panel-box">
+                            <h3>System Tier Engine</h3>
+                            <div class="form-group">
+                                <label style="color: var(--text-muted); font-size: 0.85rem; display:block; margin-bottom: 8px;">Select Operational Tier</label>
+                                <select id="selectTierEngine" class="pro-input-field" style="background: rgba(0,0,0,0.4);">
+                                    <option value="Starter // Basic">Starter // Basic</option>
+                                    <option value="Elite Analyst // Pro">Elite Analyst // Pro</option>
+                                    <option value="Pro Plus" selected>Pro Plus</option>
+                                    <option value="Quantum Omega // God Mode">Quantum Omega // God Mode</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn-secondary-pro" onclick="updateSystemTier()">Trigger Tier Sync</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
